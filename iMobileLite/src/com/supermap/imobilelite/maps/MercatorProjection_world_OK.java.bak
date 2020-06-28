@@ -1,0 +1,264 @@
+package com.supermap.android.maps;
+
+import android.graphics.Point;
+import android.util.Log;
+
+class MercatorProjection implements ProjectionX {
+	private static final String LOG_TAG = "com.supermap.android.maps.mercatorprojection";
+	private final int TILE_SIZE = 256;
+	public static final double MAX_LAT = 85.051128779806589D;
+	private static final int EARTH_RADIUS_METERS = 6378137;
+	private MapView mapView;
+	private int zoomLevel;
+	private int centerLat;
+	private int centerLng;
+	private int centerXPix;
+	private int centerYPix;
+	private static final int[] SCALE_FACTORS = { 0, 0, 110936008, 55468004,
+			27734002, 13867001, 6933500, 3466750, 1733375, 866687, 433343,
+			216671, 108335, 54167, 27083, 13541, 6770, 3385, 1692 };
+	
+	//added by zhouxu // TODO: 其实只要知道bounds的长和宽就可以算出lon_rectify，lat_rectify了
+	// TODO: 待删除
+	private double viewbounds_left = -2.5776731363158412E7;
+	private double viewbounds_bottom = -2.5776731363158423E7;
+	private double viewbounds_right = 2.5776731363158412E7;
+	private double viewbounds_top = 2.57767313631584E7;
+	
+	private double bounds_left = -2.0037508342789244E7;
+	private double bounds_bottom = -2.5776731363158423E7;
+	private double bounds_right = 2.0037508342789244E7;
+	private double bounds_top = 2.57767313631584E7;
+	
+	private double lon_rectify = 0.0;
+	private double lat_rectify = 0.0;
+
+	public MercatorProjection(MapView mapView) {
+		this.mapView = mapView;
+		// TODO: 从mapView里获取viewbounds和bounds坐标
+		
+		lon_rectify = (bounds_right - bounds_left) / (viewbounds_right - viewbounds_left); // 0.7773486894241371
+		// TODO: 纬度方向纠偏
+	}
+
+	private void check() {
+		boolean reset = false;
+
+		if (this.mapView.getZoomLevel() != this.zoomLevel) {
+			reset = true;
+		}
+		GeoPoint c = this.mapView.centerGeoPoint;
+
+		if (c == null)
+			return;
+		if (c.getLatitudeE6() != this.centerLat)
+			reset = true;
+		if (c.getLongitudeE6() != this.centerLng) {
+			reset = true;
+		}
+		if (!reset) {
+			return;
+		}
+		if (reset)
+			synchronized (this) {
+				this.zoomLevel = this.mapView.getZoomLevel();
+				this.centerLat = c.getLatitudeE6();
+				this.centerLng = c.getLongitudeE6();
+				Point p = toGlobalPixels(c, new Point());
+				this.centerXPix = p.x;
+				this.centerYPix = p.y;
+			}
+	}
+
+	public int getScaleFactor(int zoom) {
+		return SCALE_FACTORS[zoom];
+	}
+
+	private GeoPoint fromGlobalPixels(int x, int y) {
+		int zoom = this.mapView.getZoomLevel();
+		int totalX = TILE_SIZE << zoom;
+
+		if (totalX == 0)
+			x = 0;
+		else {
+			x = (totalX + x) % totalX;
+		}
+		
+		// added by zhouxu
+		//int actual_totalX = (int)(totalX * this.lon_rectify);
+		//x = (int)(x / (double)totalX * actual_totalX);
+		                      //x = x + (int)((1-this.lon_rectify)/2 * totalX); 
+
+		double latitude = pixelYToLatitude(y, zoom);
+		if (latitude > 85.051128779806589D)
+			latitude = 85.051128779806589D;
+		else if (latitude < -85.051128779806589D) {
+			latitude = -85.051128779806589D;
+		}
+
+		int longe6 = Util.to1E6(pixelXToLongitude(x, zoom));
+		int late6 = Util.to1E6(latitude);
+		return new GeoPoint(late6, longe6);
+	}
+
+	private float metersPerPixel(double latitude, int zoom) {
+		// TODO: 当地图bounds的宽大于高时可能会有问题
+		return (float) (Math.cos(latitude * 3.141592653589793D / 180.0D) * 2.0D * 3.141592653589793D * 6378137.0D / (TILE_SIZE << zoom));
+	}
+
+	public float metersToEquatorPixels(float meters) {
+		check();
+		float dist = metersPerPixel(
+				Util.from1E6(this.mapView.getMapCenter().getLatitudeE6()),
+				this.mapView.getZoomLevel());
+		return meters / dist;
+	}
+
+	Point toGlobalPixels(GeoPoint in, Point out) {
+		if (out == null) {
+			out = new Point();
+		}
+		int zoom = this.mapView.getZoomLevel();
+
+		double longitude = Util.from1E6(in.getLongitudeE6());
+
+		//out.x = (int) ((longitude + 180.0D) / 360.0D * (TILE_SIZE << zoom)); // by zhouxu 
+		
+		int totalX = TILE_SIZE << zoom;
+		int actual_totalX = (int)(totalX * this.lon_rectify);
+		//int distLeft = totalX - actual_totalX / 2;
+		out.x = (int)(actual_totalX * (longitude + 180.0D) / 360.0D);
+		//out.x = (int) (((longitude + 180.0D) / 360.0D - (1-this.lon_rectify)/2) * totalX);  
+
+		double latitude = Util.from1E6(in.getLatitudeE6());
+		double sinLat = Math.sin(Math.toRadians(latitude));
+		out.y = (int) ((0.5D - Math.log((1.0D + sinLat) / (1.0D - sinLat)) / 12.566370614359172D) * (TILE_SIZE << zoom));
+
+		return out;
+	}
+
+	public Point toPixels(GeoPoint in, Point out) {
+		if (out == null)
+			out = new Point();
+		check();
+		toGlobalPixels(in, out);
+		int totalX = TILE_SIZE << this.mapView.getZoomLevel();
+
+		int pixelX = out.x - this.centerXPix;
+		int pixelY = out.y - this.centerYPix;
+
+		if (Math.abs(pixelX) > totalX / 2) {
+			int sign = pixelX < 0 ? 1 : -1;
+			pixelX += totalX * sign;
+		}
+
+		out.x = (this.mapView.getMapWidth() / 2 + pixelX);
+		out.y = (this.mapView.getMapHeight() / 2 + pixelY);
+		return out;
+	}
+
+	private double pixelXToLongitude(double x, int zoom) {
+		//return 360.0D * (x / (TILE_SIZE << zoom) - 0.5D); 
+		
+		// added by zhouxu
+		int total_X = TILE_SIZE << zoom;
+		int actual_total_X = (int)(total_X * this.lon_rectify);
+		
+		return 360.0D * (x / actual_total_X - 0.5D);
+		/*
+		int dist = (total_X - actual_total_X) / 2;
+		return 360.0D * ( (x - dist) / actual_total_X - 0.5D);
+		*/
+	}
+
+	private double pixelYToLatitude(double y, int zoom) {
+		double yy = 0.5D - y / (TILE_SIZE << zoom);
+		double lat = 90.0D - 360.0D * Math.atan(Math
+				.exp(-yy * 2.0D * 3.141592653589793D)) / 3.141592653589793D;
+
+		return lat;
+	}
+
+	public Point getScreenFromGlobal(Point in) {
+		check();
+		int totalX = TILE_SIZE << this.mapView.getZoomLevel();		
+		int totalY = TILE_SIZE << this.mapView.getZoomLevel();
+		int pixelX = in.x - this.centerXPix;
+		int pixelY = in.y - this.centerYPix;
+
+		if (Math.abs(pixelX) > totalX / 2) {
+			int sign = pixelX < 0 ? 1 : -1;
+			pixelX += totalX * sign;
+		}
+
+		return new Point(this.mapView.getMapWidth() / 2 + pixelX,
+				this.mapView.getMapHeight() / 2 + pixelY);
+	}
+
+	protected Point getGlobalFromScreen(int x, int y, Point out) {
+		check();
+		int totalX = TILE_SIZE << this.mapView.getZoomLevel();
+		int totalY = TILE_SIZE << this.mapView.getZoomLevel();
+		int globalX = 0;
+		try {
+			globalX = (totalX + (this.centerXPix + (x - (this.mapView
+					.getMapWidth() >> 1)))) % totalX;
+		} catch (Exception ex) {
+			globalX = 0;
+			Log.w(LOG_TAG, "Error calculating projection for zoom level:"
+							+ this.mapView.getZoomLevel() + ": "
+							+ ex.getMessage());
+			ex.printStackTrace();
+		}
+
+		int globalY = this.centerYPix
+				+ (y - (this.mapView.getMapHeight() >> 1));
+
+		if ((globalY < 0) || (globalY > totalY)) {
+			return null;
+		}
+		if (out == null)
+			out = new Point();
+		out.set(globalX, globalY);
+		return out;
+	}
+
+	public GeoPoint fromPixels(int x, int y) {
+		check();
+
+		int upperLeftX = this.centerXPix - (this.mapView.getMapWidth() >> 1);
+		int upperLeftY = this.centerYPix - (this.mapView.getMapHeight() >> 1);
+		return fromGlobalPixels(x + upperLeftX, y + upperLeftY);
+	}
+
+	public int calculateZoomLevel(BoundingBox bbox) {
+		return calculateZoomLevel(bbox, 0, 0);
+	}
+
+	public int calculateZoomLevel(BoundingBox bbox, int horizontalMargin,
+			int verticalMargin) {
+		int zoom = this.mapView.getZoomLevel();
+		try {
+			Point ul = toPixels(bbox.ul, null);
+			Point lr = toPixels(bbox.lr, null);
+
+			double width = Math.abs(ul.x - lr.x);
+			double height = Math.abs(ul.y - lr.y);
+			Log.d("merc", "ul " + ul + "; lr:" + lr + "; w " + width
+					+ "; height: " + height);
+			double ratio = Math.max(width
+					/ (this.mapView.getMapWidth() - horizontalMargin), height
+					/ (this.mapView.getMapHeight() - verticalMargin));
+
+			double ratioLog = Math.log(ratio) / Math.log(2.0D);
+
+			int deltaZoom = ratio > 1.0D ? (int) Math.ceil(ratioLog)
+					: (int) Math.ceil(ratioLog);
+
+			zoom = this.mapView.getZoomLevel() - deltaZoom;
+		} catch (Exception ex) {
+		}
+
+		return zoom;
+	}
+}

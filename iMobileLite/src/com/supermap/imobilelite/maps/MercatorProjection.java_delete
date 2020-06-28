@@ -1,0 +1,483 @@
+package com.supermap.android.maps;
+
+import java.util.Map;
+
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.util.Log;
+
+class MercatorProjection implements ProjectionX {
+	private static final String LOG_TAG = "com.supermap.android.maps.mercatorprojection";
+	private final int TILE_SIZE = 256;
+	public static final double MAX_LAT = 85.051128779806589D;
+	private static final int EARTH_RADIUS_METERS = 6378137;
+	private LayerView layerView;
+	private int zoomLevel;
+	private int centerLat;
+	private int centerLng;
+	private int centerXPix;
+	private int centerYPix;
+	private static final int[] SCALE_FACTORS = { 0, 0, 110936008, 55468004,
+			27734002, 13867001, 6933500, 3466750, 1733375, 866687, 433343,
+			216671, 108335, 54167, 27083, 13541, 6770, 3385, 1692 };
+	
+	//added by zhouxu 
+	private double lon_rectify = 1.0;
+	private double lat_rectify = 1.0;
+	
+	//3857全球范围的bounds
+	private static final double GlobeLeft = -20037508.34;
+	private static final double GlobeRight = 20037508.34;
+	private static final double GlobeTop = 20037508.34;
+	private static final double GlobeBottom = -20037508.34;
+	private static final double GlobeLeft_lon = -180;
+	private static final double GlobeRight_lon = 180;
+	private static final double GlobeTop_lat = 85.051128779806589;
+	private static final double GlobeBottom_lat = -85.051128779806589;
+	
+	//地图范围的bounds  
+	private double boundsLeft = GlobeLeft; 
+	private double boundsRight = GlobeRight; 
+	private double boundsTop = GlobeTop;  
+	private double boundsBottom = GlobeBottom; 
+	
+	// 用于调试京津的数据
+//	private double boundsLeft =  12773153.12;
+//	private double boundsRight = 13275262.32;
+//	private double boundsTop = 5154069.96; 
+//	private double boundsBottom = 4539014.84;
+	
+	//bounds对应的经纬度范围
+	private double boundsLeft_lon = GlobeLeft_lon;
+	private double boundsRight_lon = GlobeRight_lon;
+	private double boundsTop_lat = GlobeTop_lat;
+	private double boundsBottom_lat = GlobeBottom_lat;
+	private double lon_range = GlobeRight_lon * 2 ;
+	private double lat_range = GlobeTop_lat * 2;
+	
+	private double leftPadRate = 0;
+    private double rightPadRate = 1;
+    private double topPadRate = 0;
+    private double bottomPadRate = 1;
+    // 设置固定比例尺时，存储地图状态
+    Map<String, Object> mapStatus = null;
+    
+    public MercatorProjection(LayerView layerView) {
+        this.layerView = layerView;
+        // 给地图范围的bounds动态赋值
+        // if (Double.compare(layerView.getBoundsLeft(), layerView.getBoundsRight()) != 0) {
+        // boundsRight = layerView.getBoundsRight();
+        // boundsTop = layerView.getBoundsTop();
+        // boundsBottom = layerView.getBoundsBottom();
+        // boundsLeft = layerView.getBoundsLeft();
+        // }
+
+        leftPadRate = (boundsLeft - GlobeLeft) / (GlobeRight - GlobeLeft);
+        rightPadRate = (boundsRight - GlobeLeft) / (GlobeRight - GlobeLeft);
+        topPadRate = (GlobeTop - boundsTop) / (GlobeTop - GlobeBottom);
+        bottomPadRate = (GlobeTop - boundsBottom) / (GlobeTop - GlobeBottom);
+				
+		// 如果地图bounds不是正方形，计算偏差率
+        // double boundsWidth = layerView.getBoundsWidth();
+        // double boundsHeight = layerView.getBoundsHeight();
+        // if(boundsWidth < boundsHeight){
+        // lon_rectify = boundsWidth / boundsHeight;
+        // }else if(boundsWidth > boundsHeight){
+        // lat_rectify = boundsHeight / boundsWidth;
+        // }
+		
+		// 计算地图的经纬度范围
+		boundsLeft_lon = boundsLeft / GlobeRight * GlobeRight_lon;
+		boundsRight_lon = boundsRight / GlobeRight * GlobeRight_lon;
+		// 纬度换算
+		boundsTop_lat = MercatorProjectionTool.mercatorY2lat(boundsTop);
+		boundsBottom_lat = MercatorProjectionTool.mercatorY2lat(boundsBottom);
+		
+		lon_range = boundsRight_lon - boundsLeft_lon;
+		lat_range = boundsTop_lat - boundsBottom_lat;
+	}
+	
+	private void check() {
+		boolean reset = false;
+
+		if (this.layerView.getZoomLevel() != this.zoomLevel) {
+			reset = true;
+		}
+		GeoPoint c = this.layerView.mapView.centerGeoPoint;
+
+		if (c == null)
+			return;
+//		if (c.getLatitudeE6() != this.centerLat)
+//			reset = true;
+//		if (c.getLongitudeE6() != this.centerLng) {
+//			reset = true;
+//		}
+		if (!reset) {
+			return;
+		}
+		if (reset)
+			synchronized (this) {
+				this.zoomLevel = this.layerView.getZoomLevel();
+//				this.centerLat = c.getLatitudeE6();
+//				this.centerLng = c.getLongitudeE6();
+				Point p = toGlobalPixels(c, new Point());
+				this.centerXPix = p.x;
+				this.centerYPix = p.y;
+			}
+	}
+
+	public int getScaleFactor(int zoom) {
+		return SCALE_FACTORS[zoom];
+	}
+
+	private GeoPoint fromGlobalPixels(int x, int y) {
+		int zoom = this.layerView.getZoomLevel();
+		int totalX = TILE_SIZE << zoom;
+//        TotalTileImage tti = modifyTotal(totalX, 0);
+        TotalTileImage tti = calculateTotal();
+        if (tti != null && tti.totalX != -1) {
+            totalX = tti.totalX;
+        }
+		if (totalX == 0)
+			x = 0;
+		else {
+			x = (totalX + x) % totalX;
+		}
+		
+		double latitude = pixelYToLatitude(y, zoom);
+		if (latitude > 85.051128779806589D)
+			latitude = 85.051128779806589D;
+		else if (latitude < -85.051128779806589D) {
+			latitude = -85.051128779806589D;
+		}
+
+		int longe6 = Util.to1E6(pixelXToLongitude(x, zoom));
+		int late6 = Util.to1E6(latitude);
+		return new GeoPoint(late6, longe6);
+	}
+
+	private float metersPerPixel(double latitude, int zoom) {
+	    int totalY = TILE_SIZE << zoom;
+//	    TotalTileImage tti = modifyTotal(0, totalY);
+	    TotalTileImage tti = calculateTotal();
+        if (tti != null && tti.totalY != -1) {
+            totalY = tti.totalY;
+        }
+		// TODO: 暂时没有功能用到该接口
+		// return (float) (Math.cos(latitude * 3.141592653589793D / 180.0D) * 2.0D * 3.141592653589793D * 6378137.0D / (TILE_SIZE << zoom));
+		return (float) (Math.cos(latitude * Math.PI / 180.0D) * 2.0D * Math.PI * EARTH_RADIUS_METERS / totalY);
+	}
+
+	public float metersToEquatorPixels(float meters) {
+		check();
+//		float dist = metersPerPixel(
+//				Util.from1E6(this.layerView.getMapCenter().getLatitudeE6()),
+//				this.layerView.getZoomLevel());
+//		return meters / dist;
+		return 0f;
+	}
+
+    Point toGlobalPixels(GeoPoint in, Point out) {
+        if (out == null) {
+            out = new Point();
+        }
+        int zoom = this.layerView.getZoomLevel();
+        int totalX = TILE_SIZE << zoom;
+        int totalY = TILE_SIZE << zoom;
+//        TotalTileImage tti = modifyTotal(totalX, totalY);
+        TotalTileImage tti = calculateTotal();
+        if (tti != null && tti.totalX != -1 && tti.totalY != -1) {
+            totalX = tti.totalX;
+            totalY = tti.totalY;
+        }
+        /*double longitude = Util.from1E6(in.getLongitudeE6());
+
+        out.x = (int) ((longitude + 180.0D) / 360.0D * totalX); // by zhouxu
+        double latitude = Util.from1E6(in.getLatitudeE6());
+        double sinLat = Math.sin(Math.toRadians(latitude));
+        out.y = (int) ((0.5D - Math.log((1.0D + sinLat) / (1.0D - sinLat)) / 12.566370614359172D) * totalY);
+        
+        if (layerView.isPCSNonEarth()){
+		    
+	        int actual_totalX = (int)(totalX * this.lon_rectify);
+	        // out.x = (int)(actual_totalX * (longitude + 180.0D) / 360.0D);  // only for world
+	        out.x = (int)(actual_totalX * (longitude - boundsLeft_lon) / lon_range);  // 考虑非全球地图情况
+	        
+	      //换算成全球范围的纬度
+	        latitude = (latitude - boundsBottom_lat) / lat_range * (GlobeTop_lat - GlobeBottom_lat) + GlobeBottom_lat;
+	        sinLat = Math.sin(Math.toRadians(latitude));
+	        int actual_totalY = (int)(totalY * this.lat_rectify); // totalX = totalY
+	        out.y = (int) ((0.5D - Math.log((1.0D + sinLat) / (1.0D - sinLat)) / (4 * Math.PI)) * actual_totalY);
+		}*/
+
+		return out;
+	}
+
+//    Point toGlobalPixels(GeoPoint in, Point out) {
+//        if (out == null) {
+//            out = new Point();
+//        }
+//        int zoom = this.layerView.getZoomLevel();
+//
+//        double longitude = Util.from1E6(in.getLongitudeE6());
+//
+//        out.x = (int) ((longitude + 180.0D) / 360.0D * (256 << zoom));
+//
+//        double latitude = Util.from1E6(in.getLatitudeE6());
+//        double sinLat = Math.sin(Math.toRadians(latitude));
+//        out.y = (int) ((0.5D - Math.log((1.0D + sinLat) / (1.0D - sinLat)) / 12.566370614359172D) * (256 << zoom));
+//
+//        return out;
+//    }
+
+    public Point toPixels(GeoPoint in, Point out) {
+		if (out == null)
+			out = new Point();
+		check();
+		toGlobalPixels(in, out);
+		int totalX = TILE_SIZE << this.layerView.getZoomLevel();
+//		TotalTileImage tti = modifyTotal(totalX, 0);
+		TotalTileImage tti = calculateTotal();
+        if (tti != null && tti.totalX != -1) {
+            totalX = tti.totalX;
+        }
+		int pixelX = out.x - this.centerXPix;
+		int pixelY = out.y - this.centerYPix;
+
+		if (Math.abs(pixelX) > totalX / 2) {
+			int sign = pixelX < 0 ? 1 : -1;
+			pixelX += totalX * sign;
+		}
+
+		out.x = (this.layerView.getMapWidth() / 2 + pixelX);
+		out.y = (this.layerView.getMapHeight() / 2 + pixelY);
+		return out;
+	}
+
+    private double pixelXToLongitude(double x, int zoom) {
+        int total_X = TILE_SIZE << zoom;
+//        TotalTileImage tti = modifyTotal(total_X, 0);
+        TotalTileImage tti = calculateTotal();
+        if (tti != null && tti.totalX != -1) {
+            total_X = tti.totalX;
+        }
+//        if (layerView.isPCSNonEarth()) {
+        if (true) {
+            // added by zhouxu          
+            int actual_total_X = (int) (total_X * this.lon_rectify);
+            // return 360.0D * (x / actual_total_X - 0.5D);
+            return boundsLeft_lon + lon_range * x / actual_total_X;
+        } else {
+            return 360.0D * (x / (total_X) - 0.5D);
+        }
+    }
+
+    private double pixelYToLatitude(double y, int zoom) {
+        // 原来的
+        int total_Y = TILE_SIZE << zoom;
+//        TotalTileImage tti = modifyTotal(0, total_Y);
+        TotalTileImage tti = calculateTotal();
+        if (tti != null && tti.totalY != -1) {
+            total_Y = tti.totalY;
+        }
+        double yy = 0.5D - y / (total_Y);
+        double lat = 90.0D - 360.0D * Math.atan(Math.exp(-yy * 2.0D * 3.141592653589793D)) / 3.141592653589793D;
+//        if (layerView.isPCSNonEarth()) {
+        if (true) {
+            int actual_total_Y = (int) (total_Y * this.lat_rectify);
+            yy = 0.5D - y / actual_total_Y;
+            lat = 90.0D - 360.0D * Math.atan(Math.exp(-yy * 2.0D * Math.PI)) / Math.PI;
+            // 这个lat是全球范围的lat，应换算到地图对应的纬度范围内：
+            lat = lat / GlobeTop_lat * (boundsTop_lat - boundsBottom_lat) / 2 + (boundsTop_lat + boundsBottom_lat) / 2;
+        }
+        return lat;
+	}
+
+//    private double pixelXToLongitude(double x, int zoom) {
+//        return 360.0D * (x / (256 << zoom) - 0.5D);
+//    }
+
+//    private double pixelYToLatitude(double y, int zoom) {
+//        double yy = 0.5D - y / (256 << zoom);
+//        double lat = 90.0D - 360.0D * Math.atan(Math.exp(-yy * 2.0D * 3.141592653589793D)) / 3.141592653589793D;
+//
+//        return lat;
+//    }
+
+    public Point getScreenFromGlobal(Point in) {
+		check();
+		int totalX = TILE_SIZE << this.layerView.getZoomLevel();		
+		int totalY = TILE_SIZE << this.layerView.getZoomLevel();
+//		TotalTileImage tti = modifyTotal(totalX, totalY);
+		TotalTileImage tti = calculateTotal();
+        if (tti != null && tti.totalX != -1 && tti.totalY != -1) {
+            totalX = tti.totalX;
+            totalY = tti.totalY;
+        }
+		int pixelX = in.x - this.centerXPix;
+		int pixelY = in.y - this.centerYPix;
+
+		if (Math.abs(pixelX) > totalX / 2) {
+			int sign = pixelX < 0 ? 1 : -1;
+			pixelX += totalX * sign;
+		}
+
+		return new Point(this.layerView.getMapWidth() / 2 + pixelX,
+				this.layerView.getMapHeight() / 2 + pixelY);
+	}
+
+	protected Point getGlobalFromScreen(int x, int y, Point out) {
+		check();
+		int totalX = TILE_SIZE << this.layerView.zoomLevel;
+		int totalY = TILE_SIZE << this.layerView.zoomLevel;
+//		TotalTileImage tti = modifyTotal(totalX, totalY);
+		TotalTileImage tti = calculateTotal();
+        if (tti != null && tti.totalX != -1 && tti.totalY != -1) {
+            totalX = tti.totalX;
+            totalY = tti.totalY;
+        }
+		int globalX = 0;
+		try {
+			globalX = (totalX + (this.centerXPix + (x - (this.layerView
+					.getMapWidth() >> 1)))) % totalX;
+		} catch (Exception ex) {
+			globalX = 0;
+			Log.w(LOG_TAG, "Error calculating projection for zoom level:"
+							+ this.layerView.getZoomLevel() + ": "
+							+ ex.getMessage());
+			ex.printStackTrace();
+		}
+
+		int globalY = this.centerYPix
+				+ (y - (this.layerView.getMapHeight() >> 1));
+
+		if ((globalY < 0) || (globalY > totalY)) {
+			return null;
+		}
+		if (out == null)
+            out = new Point();
+        out.set(globalX, globalY);
+		// 支持固定比例尺，直接返回
+        /*if (layerView.isVisibleScalesEnabled() && layerView.getVisibleScales() != null && layerView.getVisibleScales().length >= layerView.getZoomLevel()) {
+            return out;
+        }*/
+        // 通常情况下以全球范围出图，需过滤不在当前范围的图片后返回
+        int entireTop = (int) (totalY * topPadRate) - 256;
+        int entireLeft = (int) (totalX * leftPadRate) - 256;
+        int entireBottom = (int) (totalY * bottomPadRate) + 256;
+        int entireRight = (int) (totalX * rightPadRate) + 256;
+        /*if (!layerView.isPCSNonEarth() && !(globalX >= entireLeft && globalX <= entireRight && globalY >= entireTop && globalY <= entireBottom)) {
+//            if(layerView.getCurrentMapURL().contains("jingjin")) {
+//                Log.w("iserver", "filted:"+globalX+","+globalY+","+entireLeft+","+entireRight+","+entireTop+","+entireBottom);
+//            }
+            
+            return null;
+        }*/
+//      if(layerView.getCurrentMapURL().contains("jingjin")) {
+//          Log.w("iserver", "remained:"+globalX+","+globalY+","+entireLeft+","+entireRight+","+entireTop+","+entireBottom);
+//      }
+		return out;
+	}
+
+	public GeoPoint fromPixels(int x, int y) {
+		check();
+
+		int upperLeftX = this.centerXPix - (this.layerView.getMapWidth() >> 1);
+		int upperLeftY = this.centerYPix - (this.layerView.getMapHeight() >> 1);
+		return fromGlobalPixels(x + upperLeftX, y + upperLeftY);
+	}
+
+	public int calculateZoomLevel(BoundingBox bbox) {
+		return calculateZoomLevel(bbox, 0, 0);
+	}
+
+	public int calculateZoomLevel(BoundingBox bbox, int horizontalMargin,
+			int verticalMargin) {
+		int zoom = this.layerView.getZoomLevel();
+		try {
+			Point ul = toPixels(bbox.leftTop, null);
+			Point lr = toPixels(bbox.rightBottom, null);
+
+			double width = Math.abs(ul.x - lr.x);
+			double height = Math.abs(ul.y - lr.y);
+			Log.d("merc", "ul " + ul + "; lr:" + lr + "; w " + width
+					+ "; height: " + height);
+			double ratio = Math.max(width
+					/ (this.layerView.getMapWidth() - horizontalMargin), height
+					/ (this.layerView.getMapHeight() - verticalMargin));
+
+			double ratioLog = Math.log(ratio) / Math.log(2.0D);
+
+			int deltaZoom = ratio > 1.0D ? (int) Math.ceil(ratioLog)
+					: (int) Math.ceil(ratioLog);
+
+			zoom = this.layerView.getZoomLevel() - deltaZoom;
+		} catch (Exception ex) {
+		}
+
+		return zoom;
+	}
+
+    Rect getMapImageSize() {
+        // if (layerView.isPCSNonEarth()) {
+        if (true) {
+            // 平面坐标系的返回个左上角在0,0的就可以了，别的无所谓。
+            return new Rect(0, 0, 256, 256);
+        }
+        int totalX = TILE_SIZE << this.layerView.getZoomLevel();
+        int totalY = TILE_SIZE << this.layerView.getZoomLevel();
+//        TotalTileImage tti = modifyTotal(totalX, totalY);
+        TotalTileImage tti = calculateTotal();
+        if (tti != null && tti.totalX != -1 && tti.totalY != -1) {
+            totalX = tti.totalX;
+            totalY = tti.totalY;
+        }
+        
+        return new Rect((int)(totalX * leftPadRate), (int)(totalY * topPadRate), (int)(totalX * rightPadRate), (int)(totalY * bottomPadRate));
+    }
+    
+//    TotalTileImage modifyTotal(int totalX, int totalY) {
+//        TotalTileImage tti = new TotalTileImage();
+//        // 支持固定比例尺
+//        if (layerView.isVisibleScalesEnabled() && layerView.getVisibleScales() != null && layerView.getVisibleScales().length >= this.layerView.getZoomLevel()) {
+//            // BoundingBox bbox = new BoundingBox(Util.Mercator2lonLat(boundsRight, boundsTop), Util.Mercator2lonLat(boundsLeft, boundsBottom));
+//            // int level = calculateZoomLevel(bbox) + this.layerView.getZoomLevel();
+//            double scale = layerView.getVisibleScales()[layerView.getZoomLevel() - 1];
+//            if (mapStatus == null) {
+//                mapStatus = Util.getMapStatus(layerView.isPCSNonEarth(), layerView.getCurrentMapURL());
+//            }
+//            // Map<String, Object> map = Util.getMapStatus(layerView.isPCSNonEarth(), layerView.getCurrentMapURL());
+//            Double viewBoundsWidth = (Double) mapStatus.get("viewBoundsWidth");
+//            Double viewBoundsHeight = (Double) mapStatus.get("viewBoundsHeight");
+//            Double defscale = (Double) mapStatus.get("scale");
+//            if (viewBoundsWidth != null && viewBoundsHeight != null && defscale != null && scale != 0 && defscale != 0) {
+//                tti.totalX = TILE_SIZE * new Long(Math.round(layerView.getBoundsWidth() / defscale / viewBoundsWidth / scale + 0.499999)).intValue();
+//                tti.totalY = TILE_SIZE * new Long(Math.round(layerView.getBoundsHeight() / defscale / viewBoundsHeight / scale + 0.499999)).intValue();
+//            }
+//            Log.d("iserver", "setTotal scale and totalX :" + scale + "," + totalX + "," + totalY);
+//        }
+//        return tti;
+//    }
+    
+    TotalTileImage calculateTotal(){
+        TotalTileImage tti = new TotalTileImage();
+     // 支持固定比例尺
+        /*if (layerView.isVisibleScalesEnabled() && layerView.getVisibleScales() != null && layerView.getVisibleScales().length >= this.layerView.getZoomLevel()) {
+            // BoundingBox bbox = new BoundingBox(Util.Mercator2lonLat(boundsRight, boundsTop), Util.Mercator2lonLat(boundsLeft, boundsBottom));
+            // int level = calculateZoomLevel(bbox) + this.layerView.getZoomLevel();
+            double scale = layerView.getVisibleScales()[layerView.getZoomLevel() - 1];
+            if (scale > 0) {
+                double scaleRate = 591658700.96835596270088883703329 / scale;
+                tti.totalX = (int) (TILE_SIZE * scaleRate);
+                tti.totalY = (int) (TILE_SIZE * scaleRate);
+            }  
+            Log.d("iserver", "setTotal scale and totalX :" + scale + "," + tti.totalX + "," + tti.totalY);
+        }*/
+        return tti;
+    }
+    
+    class TotalTileImage {
+        int totalX = -1;
+        int totalY = -1;
+    }
+}
