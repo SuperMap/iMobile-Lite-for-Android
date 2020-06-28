@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="clearall">清除所有</string>
+	
+	<string name="overlayeventdemo_readme">
+        <b>范例说明</b>
+		\n1.长按地图弹出标注对话框
+		\n2.点击清除所有菜单项清除所有标注
+	</string>
+</resources>

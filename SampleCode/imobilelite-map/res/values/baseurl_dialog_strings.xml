@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="baseurl_dialog_title">地图服务名</string>
+	<string name="baseurl_dialog_service_url_tv">服务地址</string>
+	<string name="baseurl_dialog_instance_tv">实例地址</string>
+	<string name="baseurl_dialog_default_instance">/map-</string>
+</resources>

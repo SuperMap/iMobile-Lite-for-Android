@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+     >
+     
+    <TextView
+        android:id="@+id/iserverurl_dialog_url_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:text="@string/iserver_service_url" />
+
+    <EditText
+        android:id="@+id/iserverurl_dialog_url_et"
+        android:layout_width="260dip"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:autoText="false"
+        android:capitalize="none"
+        android:gravity="top"
+        android:singleLine="false"
+        android:scrollHorizontally="true" 
+        android:text="@string/default_iserver_url" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:paddingTop="10dip"
+        android:gravity="bottom|center_horizontal"
+        android:paddingBottom="10dip">
+
+        <Button
+            android:id="@+id/iserverurl_dialog_confirm_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/confirm" >
+        </Button>
+
+        <Button
+            android:id="@+id/iserverurl_dialog_cancel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iserverurl_dialog_confirm_btn"
+            android:text="@string/cancel" >
+        </Button>
+    </RelativeLayout>
+
+</LinearLayout>

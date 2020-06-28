@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/container"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    
+    <com.supermap.imobilelite.maps.MapView
+	    android:id="@+id/mapview"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:clickable="true"
+	    android:enabled="true"
+	/>
+    
+     <!--  <Button
+    		android:id="@+id/location"
+    		android:background="@drawable/location_marker"
+	    	android:layout_width="wrap_content"
+	   		android:layout_height="wrap_content"
+	   		android:layout_alignParentRight="true"
+	   		android:layout_alignParentTop="true"
+	   		android:layout_marginTop="1dip"
+ 		/> -->
+ 	<Button 
+        android:id="@+id/button_help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/help"
+        android:visibility="gone" />
+ 	  <AbsoluteLayout
+        android:id="@+id/popuprl"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:id="@+id/balloon_main_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"  
+            android:layout_x="-1000px"
+            android:layout_y="-1000px" 
+            android:background="@drawable/balloon_overlay_unfocused"
+            android:orientation="vertical" >
+
+            <AbsoluteLayout
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+              
+                <TextView
+                    android:id="@+id/balloon_item_title"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_x="2dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center_vertical"
+                    android:textSize="12dp"/>
+
+                <ImageView
+                    android:id="@+id/map_bubbleImageOne"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_x="80dp"
+                    android:layout_y="-3dp"
+                    android:background="@drawable/close_button_style" />
+            </AbsoluteLayout>
+            
+        </LinearLayout>
+    </AbsoluteLayout>
+ 		 		  
+</RelativeLayout>

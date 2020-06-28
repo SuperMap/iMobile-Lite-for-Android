@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="distance">距离量算</string>
+	<string name="area">面积量算</string>
+	<string name="measuredemo_readme">
+        <b>范例说明</b>
+		\n1.点击菜单选择所需操作项
+		\n2.点选距离量算，点击屏幕开始绘线，可弹出量算结果。
+		\n3.点选面积量算，点击屏幕开始绘面，可弹出面积结果。
+		\n4.点选清除，删除图上所有的点线面要素和量算结果。
+	</string>
+</resources>

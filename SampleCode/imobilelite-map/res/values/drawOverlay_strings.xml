@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="clear">清除</string>
+	<string name="drawpoint">绘点</string>
+	<string name="drawline">绘线</string>
+	<string name="drawpolygon">绘面</string>
+	<string name="view">浏览</string>
+	<string name="enddraw">结束</string>
+	<string name="drawoverlaydemo_readme">
+        <b>范例说明</b>
+		\n1.点击菜单选择所需操作项，默认状态为绘制
+		\n2.点选浏览，保存绘制状态进入浏览状态
+		\n3.点选绘制，取消浏览状态进入绘制状态
+		\n4.点选结束，完成一个线或面要素的绘制
+		\n5.点选清除，删除图上所有的点线面要素
+	</string>
+</resources>

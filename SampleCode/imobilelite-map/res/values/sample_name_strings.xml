@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="simple_names">
+        <item>地图浏览</item>
+        <item>地图切换</item>
+        <item>注记浏览</item>
+        <item>注记添加</item>
+        <item>距离查询</item>
+        <item>地图更新</item>
+        <item>地图叠加</item>
+        <item>绘点线面</item> 
+        <item>地图量算</item>             
+    </string-array>
+</resources>

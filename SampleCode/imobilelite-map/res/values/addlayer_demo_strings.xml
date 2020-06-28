@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="addlayer_map">图层叠加</string>	
+	<string name="selectelayerdialog_menutitle">请选择要进行的操作</string>
+	<string name="selectelayerdialog_menuitem1">添加当前地图服务</string>
+	<string name="addlayerdialog_menuadd">添加地图服务</string>
+	
+	<string name="addlayerdemo_readme">
+        <b>范例说明</b>
+		\n1.点击地图叠加菜单项进入地图管理界面
+		\n2.点击添加地图服务菜单项添加服务
+		\n3.长按列表项对其进行添加
+	</string>
+</resources>

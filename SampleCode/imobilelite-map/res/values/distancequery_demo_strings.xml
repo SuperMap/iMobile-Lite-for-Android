@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="have_got_queryresult">请清除当前查询结果</string>
+	<string name="queryconfig_spinnerprompt">请选择一个图层</string>
+	
+	<string name="queryconfig_distance">距离范围</string>
+	<string name="queryconfig_defaultdistanceval">100000000.0</string>
+	<string name="queryconfig_layername">查询图层名称</string>
+	
+	<string name="shouldbe_number">距离字段应当为数值</string>
+	<string name="querying">正在查询，请稍候...</string>
+	<string name="query_success_total">查询成功，记录总数为：</string>
+	<string name="query_success_expect">期望显示的记录数为：</string>
+	<string name="query_success_zero">查询成功，返回记录数为：0</string>
+	<string name="query_failed">查询失败</string>
+	<string name="clear_query_result">清除查询结果</string>
+	
+	<string name="distancequerydemo_readme">
+        <b>范例说明</b>
+		\n1.长按地图弹出查询对话框
+		\n2.点击清除查询结果菜单项清除查询结果
+	</string>
+</resources>

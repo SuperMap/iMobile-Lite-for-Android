@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="switch_map">地图切换</string>
+	
+	<string name="init_default_map">初始配置服务</string>
+	
+	<string name="mapmanagedialog_menutitle">请选择要进行的操作</string>
+	<string name="mapmanagedialog_menuitem1">切换当前地图服务</string>
+	<string name="mapmanagedialog_menuitem2">编辑当前地图服务</string>
+	<string name="mapmanagedialog_menuitem3">删除当前地图服务</string>
+	<string name="mapmanagedialog_menuadd">添加新服务</string>
+	<string name="mapmanagedialog_shouldnotdelete">请不要删除默认的地图服务</string>
+	
+	<string name="iserverurldialog_getmaps">获取所有地图服务...</string>
+	
+	<string name="mapswitchdemo_readme">
+        <b>范例说明</b>
+		\n1.点击地图切换菜单项进入地图管理界面
+		\n2.点击添加服务菜单项添加服务
+		\n3.长按列表项对其进行选择、编辑、删除
+	</string>
+</resources>

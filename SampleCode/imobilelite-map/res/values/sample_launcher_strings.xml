@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">iMobileLite Map</string>
+	
+	<string name="service_url_tv">服务地址</string>
+	<string name="instance_tv">地图实例地址</string>
+	<string name="default_instance">/map-china400/rest/maps/China</string>
+	
+	
+	
+
+</resources>
