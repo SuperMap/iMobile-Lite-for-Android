@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="simple_names">       
+        <item>缓冲区分析</item> 
+        <item>叠加分析</item> 
+        <item>表面分析</item>  
+        <item>点定里程</item> 
+        <item>里程定点</item> 
+        <item>里程定线</item>             
+    </string-array>
+</resources>

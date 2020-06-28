@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+>
+
+    <TextView
+        android:id="@+id/readme_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left" 
+        android:text="@string/editfeature_text" 
+        android:textSize="24dip"/>
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal" >
+    	<Button
+       		android:id="@+id/add_geometry_button"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="1"
+        	android:text="@string/addgeometry_text"  />     	
+    	<Button
+        	android:id="@+id/select_geometry_button"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="1"
+        	android:text="@string/selectegeometry_text"  />      	
+    	<Button
+        	android:id="@+id/edit_geometry_button"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="1"
+        	android:text="@string/editgeometry_text"  />     	
+        <Button
+        	android:id="@+id/edit_field_button"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="1"
+        	android:text="@string/editfield_text"   />     	
+    	<Button
+        	android:id="@+id/delete_geometry_button"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="1"
+        	android:text="@string/deletegeometry_text"  />     	
+    	<!--  <Button
+        	android:id="@+id/clear_button"
+        	android:layout_width="wrap_content"
+        	android:layout_height="30dip"
+        	android:text="@string/clear" 
+        	android:textSize="8dip"/>-->
+    	<Button
+        	android:id="@+id/commit_button"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="1"
+        	android:text="@string/commit_text" />        	
+    	<Button
+        	android:id="@+id/readme_close_button"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="1"
+        	android:text="@string/close" />
+    
+	</LinearLayout>
+</LinearLayout>

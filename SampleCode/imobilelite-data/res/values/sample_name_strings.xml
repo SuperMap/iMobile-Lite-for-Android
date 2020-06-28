@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="simple_names">    
+         <item>数据查询</item>  
+         <item>地物编辑</item>              
+    </string-array>
+</resources>

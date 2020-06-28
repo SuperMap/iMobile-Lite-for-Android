@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"   
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:background="#ffffff">   
+	
+	<!--<Button android:layout_width="fill_parent" 
+	    android:text="@string/addfield_text" 
+	    android:layout_height="wrap_content" 
+	    android:layout_alignParentTop="true"
+	    android:id="@+id/add_id">	    
+	</Button>   
+	 <Button android:layout_width="fill_parent" android:text="删除数据" android:layout_height="wrap_content" android:id="@+id/delete_id"></Button>   
+	<Button android:layout_width="fill_parent" android:text="修改数据" android:layout_height="wrap_content" android:id="@+id/edit_id"></Button>   
+	<Button android:layout_width="fill_parent" android:text="查询数据" android:layout_height="wrap_content" android:id="@+id/query_id"></Button>    -->
+   
+	 <LinearLayout
+	    android:id="@+id/ly_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/updatefield_confirm" >
+        </Button>
+
+        <!--<Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel" >
+        </Button>-->
+    </LinearLayout>
+
+	<ListView android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    android:layout_alignParentTop="true" 
+		android:id="@+id/show_result" 
+	>   
+	</ListView>  
+</RelativeLayout>  

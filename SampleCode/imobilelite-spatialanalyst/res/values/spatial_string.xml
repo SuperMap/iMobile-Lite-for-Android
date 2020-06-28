@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="buffer_text">缓冲区分析</string>	
+	<string name="isoline_text">提取等值线</string>	 	
+	<string name="geooverlay_text">几何对象求交</string> 
+	<string name="geooverlay_text1">几何对象复原</string> 
+	<string name="queryRouteObj_text">查询路由对象</string>	
+	<string name="assignQueryPoint_text">指定查询点</string>
+	<string name="routeLocatorPoint_text">里程定点</string>
+	<string name="routeLocatorLine_text">里程定线</string>
+	<string name="locatorPoint_text">定位点</string>
+    <string name="locatorLine_text">定位线</string>
+    <string name="assignRoutePoint">指定里程点</string>
+    <string name="startRoutePoint">起始里程点</string>
+    <string name="endRoutePoint">终止里程点</string>
+    <string name="assignRoutePoint_default">100</string>
+    <string name="startRoutePoint_default">100</string>
+    <string name="endRoutePoint_default">240</string>
+	<string name="clear">清除</string>	
+		
+	<string name="buffer_readme">
+        <b>缓冲区分析范例说明</b>
+		\n1.点击菜单按钮，弹出分析菜单项;
+		\n2.点击缓冲区分析菜单执行分析操作;
+		\n3.点击清除菜单执行结果清除操作。		
+	</string>
+	<string name="overlay_readme">
+        <b>叠加分析范例说明</b>
+		\n1.点击菜单按钮，弹出分析菜单项;
+		\n2.点击几何对象求交菜单执行求交操作,此时菜单项名称修改为几何对象复原;
+		\n3.点击几何对象复原菜单恢复几何对象，此时菜单项名称修改为几何对象求交。			
+	</string>
+	<string name="isoline_readme">
+        <b>表面分析范例说明</b>
+		\n1.点击菜单按钮，弹出分析菜单项;
+		\n2.点击提取等值线菜单执行分析操作;
+		\n3.点击清除菜单执行结果清除操作。		
+	</string>
+	<string name="routecalculatemeasure_readme">
+        <b>点定里程范例说明</b>
+		\n1.点击菜单按钮，弹出分析菜单项;
+		\n2.点击查询路由对象，查询出的路由对象会显示在地图上;
+		\n3.点击指定查询点，在路由对象上绘点进行M值计算，结果会以文字形式显示;
+		\n3.点击清除菜单执行结果清除操作。		
+	</string>
+	<string name="routelocatorpoint_readme">
+        <b>里程定点范例说明</b>
+		\n1.点击菜单按钮，弹出分析菜单项;
+		\n2.点击分析菜单项，弹出对话框;
+		\n3.点击查询路由对象，查询出的路由对象会显示在地图上;
+		\n4.输入指定里程点，点击定位点,定位的点会在路由对象上高亮显示;
+		\n5.点击清除菜单执行结果清除操作。		
+	</string>
+	<string name="routelocatorline_readme">
+        <b>里程定线范例说明</b>
+		\n1.点击菜单按钮，弹出分析菜单项;
+		\n2.点击分析菜单项，弹出对话框;
+		\n3.点击查询路由对象，查询出的路由对象会显示在地图上;
+		\n4.输入起始里程点，点击定位线,定位的点会在路由对象上高亮显示;
+		\n5.点击清除菜单执行结果清除操作。		
+	</string>
+	
+</resources>

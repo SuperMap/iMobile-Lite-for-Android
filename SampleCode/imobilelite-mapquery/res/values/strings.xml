@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">iMobileLite Mapquery</string>
+    <string name="no_remind">不再提醒</string>
+ 	<string name="confirm">确定</string>
+ 	<string name="close">关闭</string>
+ 	<string name="default_service_url">http://support.supermap.com.cn:8090/iserver/services</string>
+ 	<string name="service_url_tv">服务地址:</string>
+ 	<string name="clean">清除</string>
+ 	<string name="query">查询</string>
+ 	<string name="boundsquery_name">范围查询</string>
+ 	<string name="distancequery_name">距离查询</string>
+ 	<string name="geometryquery_name">几何查询</string>
+ 	<string name="sqlquery_name">SQL查询</string>
+ 	
+ 	<string name="boundquerydemo_readme">
+        <b>范例说明</b>
+		\n1.查询满足地图所绘制指定bounds区域的首都要素
+		\n2.点击查询菜单项进行查询并展示查询结果
+		\n3.点击清除菜单项进行清除查询结果
+	</string>
+	<string name="distancequerydemo_readme">
+        <b>范例说明</b>
+		\n1.查询满足地图上指定点周围 30 地理单位距离的首都要素
+		\n2.点击查询菜单项进行查询并展示查询结果
+		\n3.点击清除菜单项进行清除查询结果
+	</string>
+	<string name="geometryquerydemo_readme">
+        <b>范例说明</b>
+		\n1.查询满足地图所绘制指定geometry(多边形)的首都要素
+		\n2.点击查询菜单项进行查询并展示查询结果
+		\n3.点击清除菜单项进行清除查询结果
+	</string>
+	<string name="sqlquerydemo_readme">
+        <b>范例说明</b>
+		\n1.查询满足指定SQL查询条件的首都要素
+		\n2.点击查询菜单项进行查询并展示查询结果
+		\n3.点击清除菜单项进行清除查询结果
+	</string>
+</resources>

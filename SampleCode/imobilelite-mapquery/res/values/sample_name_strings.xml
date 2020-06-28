@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="simple_names">       
+        <item>范围查询 </item> 
+        <item>距离查询 </item> 
+        <item>几何查询</item>  
+        <item>SQL 查询 </item>                
+    </string-array>
+</resources>

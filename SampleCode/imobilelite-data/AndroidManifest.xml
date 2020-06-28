@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.supermap.imobilelite.datasamples"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <!-- 在SD卡中创建与删除文件权限 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- 向SD卡写入数据权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-sdk
+        android:minSdkVersion="3"
+        android:targetSdkVersion="8" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+        <activity
+            android:name="com.supermap.imobilelite.datasamples.SampleLauncher"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.supermap.imobilelite.datasamples.SampleList" />     
+         <activity
+            android:name="com.supermap.imobilelite.datasamples.DataQueryDemo"
+            android:configChanges="orientation"
+            android:label="@string/app_name" />
+          <activity
+            android:name="com.supermap.imobilelite.datasamples.EditFeatureDemo"
+            android:configChanges="orientation"
+            android:label="@string/app_name" />
+        <activity 
+            android:name="com.supermap.imobilelite.datasamples.ShowEditFieldActivity" 
+            android:label="@string/app_name"  
+            android:configChanges="orientation"/>	       
+    </application>
+
+</manifest>

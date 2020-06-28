@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/service_url_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="30dip"      
+        android:layout_marginLeft="5dip"        
+        android:text="@string/service_url_tv" 
+        android:textSize ="30px"/>
+
+    <EditText
+        android:id="@+id/service_url_et"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:autoText="false"
+        android:capitalize="none"
+        android:gravity="top"
+        android:scrollHorizontally="true"
+        android:singleLine="false"
+        android:text="@string/default_service_url" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|center_horizontal"
+        android:paddingBottom="10dip"
+        android:paddingTop="10dip" >
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/confirm" >
+        </Button>     
+    </RelativeLayout>
+</LinearLayout>

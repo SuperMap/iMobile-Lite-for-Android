@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="clear">清除</string>
+	<string name="editfeature_text">地物编辑</string>	
+	<string name="editfield_text">编辑属性</string>
+    <string name="addgeometry_text">添加</string>
+	<string name="selectegeometry_text">选择</string>
+	<string name="editgeometry_text">编辑地物</string>
+	<string name="deletegeometry_text">删除</string>
+	<string name="commit_text">提交</string>
+	<string name="querying">正在查询，请稍候...</string>
+	<string name="editfeature_instance">数据实例地址</string>
+	<string name="editfeature_defaultinstance">/data-jingjin/rest/data</string>
+	<string name="editfeaturedemo_readme">	 
+        <b>数据编辑范例说明</b>
+		\n1.点击地物编辑菜单项弹出支持拖动的操作窗口;
+		\n2.选中地物后方可执行编辑和删除地物操作;
+		\n3.点击操作窗口中的编辑功能按钮执行编辑操作;
+		\n4.添加和更新地物后需点击提交按钮完成此编辑;
+		\n5.点击操作窗口中的关闭按钮退出操作窗口。
+	</string>
+	
+	<string name="addfield_text">添加数据</string>
+	<string name="fieldkey_text">属性名称:</string>
+	<string name="fieldvalue_text">属性值:</string>
+	<string name="editfield_menutitle">请选择要编辑操作</string>
+	<string name="deletefield_menuitem">删除当前属性数据</string>
+	<string name="updatefield_menuitem">修改当前属性数据</string>
+	<string name="updatefield_confirm">提交更新</string>
+	
+	<string name="editfielddemo_readme">
+        <b>属性编辑范例说明</b>
+		\n1.点击属性编辑菜单项弹出支持拖动的操作窗口;
+		\n2.地图窗口中点选一个对象，弹出对象属性列表;
+		\n3.长按待编辑的字段，选择修改当前属性数据;
+		\n4.修改属性后，点击“提交更新”则完成操作。				
+	</string>
+
+    <string name="idquery_text">ID查询</string>	
+	<string name="geometryquery_text">几何查询</string>
+	<string name="bufferquery_text">缓冲区查询</string>
+	<string name="sqlquery_text">SQL查询</string>		
+	<string name="pointquery_text">点查询</string>
+	<string name="linequery_text">绘线</string>
+	<string name="regionquery_text">绘面</string>
+	<string name="query_text">查询</string>
+	<string name="dataquery_defaultinstance">/data-world/rest/data</string>
+	<string name="dataquerydemo_readme">
+        <b>数据集查询范例说明</b>
+		\n1.点击菜单选择所需查询操作项;
+        \n2.点击ID查询和SQL查询直接返回查询结果;
+        \n3 点击几何查询和缓冲区查询弹出支持拖动的操作窗口;
+        \n4 操作窗口中支持用点线面分别进行查询，高亮显示查询结果;
+        \n5 点击操作窗口中的关闭按钮退出操作窗口。		
+	</string>
+</resources>
