@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">iMoblieLite Thirdpartlayer</string>
+	<string name="tdtlayer_name">天地图</string>
+	<string name="ogclayer_name">OGC地图</string>
+	<string name="wmslayer_name">WMS地图</string>
+	<string name="wmslayer111_name">地图WMS1.1.1</string>
+	<string name="wmslayer130_name">地图WMS1.3.0</string>
+	<string name="wmtslayer100_name">地图WMTS1.0.0</string>
+	<string-array name="simple_names">       
+        <item>天地图</item>  
+        <item>OGC地图</item>                 
+    </string-array>
+    <string-array name="ogc_names">       
+        <item>地图WMS1.1.1</item>  
+        <item>地图WMS1.3.0</item>
+        <item>地图WMTS1.0.0</item>                  
+    </string-array>
+    <string name="baseurl_dialog_service_url_tv">服务地址:</string>
+    <string name="confirm">确定</string>
+    <string name="default_service_url">http://support.supermap.com.cn:8090/iserver/services</string>
+</resources>

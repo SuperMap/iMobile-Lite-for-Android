@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="creat_theme">创建专题图</string>	    
+	<string name="remove_theme">移除专题图</string>
+		
+	<string name="themedotdensity_readme">
+        <b>点密度专题图范例说明</b>
+		\n1.点击菜单按钮，弹出专题图菜单项;
+		\n2.点击创建专题图执行创建操作;
+		\n3.点击移除专题图执行结果清除操作。		
+	</string>
+	<string name="themegraduatedsymbol_readme">
+        <b>等级符号专题图范例说明</b>
+		\n1.点击菜单按钮，弹出专题图菜单项;
+		\n2.点击创建专题图执行创建操作;
+		\n3.点击移除专题图执行结果清除操作。			
+	</string>
+	<string name="themegraph_readme">
+        <b>统计专题图范例说明</b>
+		\n1.点击菜单按钮，弹出专题图菜单项;
+		\n2.点击创建专题图执行创建操作;
+		\n3.点击移除专题图执行结果清除操作。			
+	</string>
+	<string name="themelabel_readme">
+        <b>标签专题图范例说明</b>
+		\n1.点击菜单按钮，弹出专题图菜单项;
+		\n2.点击创建专题图执行创建操作;
+		\n3.点击移除专题图执行结果清除操作。			
+	</string>
+	<string name="themerange_readme">
+        <b>分段专题图范例说明</b>
+		\n1.点击菜单按钮，弹出专题图菜单项;
+		\n2.点击创建专题图执行创建操作;
+		\n3.点击移除专题图执行结果清除操作。			
+	</string>
+	<string name="themeunique_readme">
+        <b>单值专题图范例说明</b>
+		\n1.点击菜单按钮，弹出专题图菜单项;
+		\n2.点击创建专题图执行创建操作;
+		\n3.点击移除专题图执行结果清除操作。			
+	</string>
+	<string name="themegridrange_readme">
+        <b>栅格分段专题图范例说明</b>
+		\n1.点击菜单按钮，弹出专题图菜单项;
+		\n2.点击创建专题图执行创建操作;
+		\n3.点击移除专题图执行结果清除操作。			
+	</string>
+	<string name="themegridunique_readme">
+        <b>栅格单值专题图范例说明</b>
+		\n1.点击菜单按钮，弹出专题图菜单项;
+		\n2.点击创建专题图执行创建操作;
+		\n3.点击移除专题图执行结果清除操作。			
+	</string>
+	
+</resources>

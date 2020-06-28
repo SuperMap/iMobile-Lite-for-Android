@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>       
+	<string name="traffic_transfer_analyst">路线搜索</string>	
+	<string name="traffic_transfer_instance">交通换乘实例地址</string>
+	<string name="solution_name">公交方案</string>
+	<string name="stops_name">站点查询</string>
+	
+	<string name="transfer_start">四中</string>	
+	<string name="transfer_end">宽平大路</string>
+	<string name="transfer_lesstime">最少时间</string>
+	<string name="transfer_mindistance">最短距离</string>
+	<string name="transfer_lesswalk">少步行</string>
+	<string name="transfer_lesstransfer">少换乘</string>
+	
+	<string name="transfer_defaultstart">我的位置</string>
+	<string name="transfer_defaultend">目的地</string>
+	<string name="traffic_transfer_defaultinstance">/traffictransferanalyst-sample/restjsr/traffictransferanalyst/Traffic-Changchun</string>
+	<string name="traffictransferanalyst_readme">
+        <b>范例说明</b>
+        \n1.点击移动设备的菜单按钮显示路线搜索菜单项,
+		\n2.点击路线搜索菜单项进入路线搜索界面,
+		\n3.点击不同搜索方式选项按钮进行路线搜索。
+	</string>
+</resources>

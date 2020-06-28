@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="simple_names">    
+         <item>交通换乘分析</item>  
+         <item>交通网络分析</item>              
+    </string-array>
+</resources>

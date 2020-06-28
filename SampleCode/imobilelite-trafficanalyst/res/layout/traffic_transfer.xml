@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+	>
+<EditText
+	android:id="@+id/start"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="@string/transfer_start"
+/>
+<EditText
+	android:id="@+id/end"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="@string/transfer_end"
+/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+    <Button
+    	android:id="@+id/lesstime"
+    	android:text="@string/transfer_lesstime"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    />
+     <Button
+    	android:id="@+id/mindistance"
+    	android:text="@string/transfer_mindistance"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    />
+     <Button
+    	android:id="@+id/lesswalk"
+    	android:text="@string/transfer_lesswalk"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    />
+    <Button
+    	android:id="@+id/lesstransfer"
+    	android:text="@string/transfer_lesstransfer"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    /> 
+</LinearLayout>
+<ListView 
+		android:id="@+id/stop_lv"
+	   	android:layout_width="fill_parent" 
+	   	android:layout_height="wrap_content" 
+	   	android:drawSelectorOnTop="false"/>
+</LinearLayout>

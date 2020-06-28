@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="simple_names">       
+        <item>点密度专题图</item> 
+        <item>等级符号专题图</item> 
+        <item>统计专题图</item>  
+        <item>矩阵标签专题图</item> 
+        <item>分段专题图</item> 
+        <item>单值专题图</item> 
+        <item>栅格分段专题图</item>
+        <item>栅格单值专题图</item>                  
+    </string-array>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="selectpoints_text">选取分析点</string>	
+	<string name="selecteventpoints_text">选取事件点</string>	
+	<string name="selecttargetpoints_text">选取配送目标</string>	
+	<string name="networkanalyst_instance">交通网络分析实例地址</string>
+	<string name="analyst_text">分析</string>
+	<string name="findpath_text">最佳路径分析</string>
+	<string name="findtsppath_text">旅行商分析</string>
+	<string name="servicearea_text">服务区分析</string>
+	<string name="findclosesfacilities_text">最近设施分析</string>
+	<string name="findlocation_text">选址分区分析</string>
+	<string name="findmtsppath_text">多旅行商分析</string>
+	<string name="networkanalyst_defaultinstance">/transportationanalyst-sample/rest/networkanalyst/RoadNet@Changchun</string>
+	<string name="networkanalyst_readme">
+        <b>交通网络分析范例说明</b>
+        \n1.点击移动设备菜单按钮显示分析方式菜单项,
+        \n2.点击分析菜单项将弹出支持拖动的操作窗口,
+        \n3.点击操作窗口中的清除按钮清除图上绘制结果,
+		\n4.点击操作窗口中的关闭按钮退出操作窗口。
+	</string>
+</resources>
