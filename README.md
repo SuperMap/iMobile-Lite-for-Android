@@ -19,6 +19,7 @@ SuperMap iMobile Lite for Android是一套基于Android平台的轻量级地图�
 动态分段服务
 Marker标注及事件响应
 地物标绘及事件响应
+
 二、使用说明
 提供了sample范例。
 
